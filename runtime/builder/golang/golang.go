@@ -141,25 +141,25 @@ func unarchiveZip(src io.Reader, dir string) error {
 
 	// create the zip
 	reader := bytes.NewReader(buff.Bytes())
-	zp, err := zip.NewReader(reader, size)
+	zip, err := zip.NewReader(reader, size)
 	if err != nil {
 		return err
 	}
 
 	// write the files in the zip to our tmp dir
-	for _, f := range zp.File {
+	for _, f := range zip.File {
 		rc, err := f.Open()
 		if err != nil {
 			return err
 		}
 
-		bs, err := ioutil.ReadAll(rc)
+		bytes, err := ioutil.ReadAll(rc)
 		if err != nil {
 			return err
 		}
 
 		path := filepath.Join(dir, f.Name)
-		if err := ioutil.WriteFile(path, bs, os.ModePerm); err != nil {
+		if err := ioutil.WriteFile(path, bytes, os.ModePerm); err != nil {
 			return err
 		}
 
